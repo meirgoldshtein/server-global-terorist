@@ -11,15 +11,15 @@ import { seedRegionAnalytics } from "../utils/agrigations";
 const filePath = path.join(__dirname, '..', '..', 'data', 'initialEvents.json');
 export const connectDB = async () => {
     try {
-        await connect(process.env.MONGODB_URI_2 as string);
+        await connect(process.env.MONGODB_URI as string);
         const db_is_empty = await AttackModel.countDocuments();
         // await seedRegionAnalytics();
 
-        if (db_is_empty === 0) {
-            await seedDatabase2(filePath);
-            await seedRegionAnalytics();
-            console.log("first seed");
-        }
+        // if (db_is_empty === 0) {
+        //     await seedDatabase2(filePath);
+        //     await seedRegionAnalytics();
+        //     console.log("first seed");
+        // }
         console.log("db connected");
     } catch (error) {
         console.log(error);

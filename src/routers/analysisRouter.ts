@@ -1,11 +1,11 @@
 import { Router } from "express";
 import  AttackModel from "../models/Attack";
-import { deadliestAttacks, highestCasualtyRegions, incidentTrends, search } from "../controllers/analysisController";
+import { addNewAttack, deadliestAttacks, highestCasualtyRegions, incidentTrends, search } from "../controllers/analysisController";
 const router = Router();
 
 router.get("/search/:keywords", search);
 
-
+router.post("/add-new-attack", addNewAttack);
 //מחזיר סוגי התקפות מדורגים לפי מספר הנפגעים הכולל 
 router.get("/deadliest-attack-types",deadliestAttacks);
 
