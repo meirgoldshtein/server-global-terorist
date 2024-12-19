@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { deadliestRegionsService, deadliestRegionsService2, groupsByYearService, topGroupsService } from "../services/relationshipsService";
+import { deadliestRegionsService,  groupsByYearService, topGroupsService } from "../services/relationshipsService";
 
 export const topGroups = async (req: Request, res: Response) => {
     try {
