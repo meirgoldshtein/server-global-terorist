@@ -5,11 +5,14 @@ import RegionModel from "../models/region";
 interface IGroupSumData {
     name: string;
     totalCasualties: number;
+    totalAttackes: number
 }
 
 interface IRegionData {
     name: string;
     groupsSumData: IGroupSumData[];
+    sumOfAttackes: number;
+    sumOfCasualties: number;
     
 }
     
@@ -19,7 +22,7 @@ const createRegionsList = async (): Promise<IRegionData[]> => {
     try {
         const regions = await RegionModel.find({}).select('name');
         return regions.map(region => {
-            return { name: region.name, groupsSumData: [] }
+            return { name: region.name, groupsSumData: [], sumOfAttackes: 0, sumOfCasualties: 0 }
         });
     } catch (error) {
         throw error;
@@ -59,16 +62,16 @@ const sumAllGroupCasualtiesInRegion = async (regionName: string, groupName: stri
 // מסכם את כמות הנפגעים ממערך של מתקפות של קבוצה מסויימת
 const sumAllRegionCasualtiesInGroup = async (attacks: IGroup): Promise<IGroupSumData|null> => {
     try {
-        let counter = 0;
+        let CasualtiesCounter = 0;
+        let AttacksCounter = attacks.events.length;
         attacks.events.forEach((attack: any) => {
-            counter += (attack.nkill || 0) + (attack.nwound || 0);
+            CasualtiesCounter += (attack.nkill || 0) + (attack.nwound || 0);
         });
-        if(counter === 0) {
-            return null;
-        }
+
         return {
             name: attacks.name,
-            totalCasualties: counter
+            totalCasualties: CasualtiesCounter,
+            totalAttackes: AttacksCounter
         }
 
     } catch (error) {
@@ -96,6 +99,8 @@ export const generateRegionsAndSumGroupsList = async () => {
                 const sumGroupsCasualties = await sumAllRegionCasualtiesInGroup(GroupsFiltering);
                 if (sumGroupsCasualties) {
                     region.groupsSumData.push(sumGroupsCasualties); // הוספת הנתונים ישירות
+                    region.sumOfAttackes += GroupsFiltering.events.length;
+                    region.sumOfCasualties += sumGroupsCasualties.totalCasualties;
                 }
             }
         }
@@ -130,7 +135,7 @@ export const findTheMostDeadliestRegion = async ( groupName: string) => {
             }
         })
     
-        return sortedRegions;
+        return regions;
     } catch (error) {
         return error;
     }
