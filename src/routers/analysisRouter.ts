@@ -1,6 +1,6 @@
 import { Router } from "express";
 import  AttackModel from "../models/Attack";
-import { deadliestAttacks, highestCasualtyRegions } from "../controllers/analysisController";
+import { deadliestAttacks, highestCasualtyRegions, incidentTrends } from "../controllers/analysisController";
 const router = Router();
 
 router.get("/test", async (req, res) => {
@@ -22,8 +22,6 @@ router.get("/highest-casualty-regions", highestCasualtyRegions)
 //: מחזיר תדירות תקריות לפי שנים וחודשים כמות התקריות הייחודיות במהלך התקופה הנבחנת.
 // לדוגמא: אם בוחנים 12 חודשים עבור שנה מסוימת, צריך לעשות aggregation לפי החודשים וכמות
 // תקריות ייחודיות באותם חודשים
-router.get("/incident-trends", async (req, res) => {
-    
-})
+router.get("/incident-trends/:yearNum", incidentTrends)
 
 export default router;

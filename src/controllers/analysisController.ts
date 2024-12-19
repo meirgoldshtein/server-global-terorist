@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { deadliestAttacksService, highestCasualtyRegionsService } from "../services/analysisService";
+import { deadliestAttacksService, highestCasualtyRegionsService, incidentTrendsService } from "../services/analysisService";
 
 export const deadliestAttacks = async (req: Request, res: Response) => {
     try {
@@ -19,11 +19,16 @@ export const highestCasualtyRegions = async (req: Request, res: Response) => {
     }
 }
 
-const incidentTrends = async (req: Request, res: Response) => {
+export const incidentTrends = async (req: Request, res: Response) => {
     try {
-        
+        const yearNum = Number(req.params.yearNum);
+        if  (!yearNum) {
+            throw new Error('Year number is required');
+        }
+        const response = await incidentTrendsService(yearNum);
+        res.status(200).json(response);
     } catch (error) {
-        
+        res.status(500).json(error);
     }
 }
 
