@@ -5,6 +5,7 @@ export interface IAttack extends Document {
     iyear: number;
     imonth: number;
     iday: number;
+
     country_txt: string;
     region_txt: String;
     city: string;
@@ -20,7 +21,6 @@ export interface IAttack extends Document {
     nperps: number | null;
     summary: string | null;
 }
-
 
 const eventSchema = new Schema<IAttack>({
     eventid: {

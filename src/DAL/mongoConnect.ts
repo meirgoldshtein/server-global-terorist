@@ -23,7 +23,6 @@ export const connectDB = async () => {
 }
 
 
-
 // async function seedDatabase(jsonFilePath: string) {
 
 //     const rawData = fs.readFileSync(jsonFilePath, 'utf-8');
