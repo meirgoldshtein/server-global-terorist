@@ -1,8 +1,49 @@
+import { IAttack } from "../models/Attack";
 import AttackTypeModel from "../models/attackType";
 import GroupModel from "../models/group";
 import RegionModel from "../models/region";
 import RegionAnaliticsModel from "../models/regionAnalitics";
 import YearModel from "../models/Year";
+import { addNewAttackUtil } from "../utils/addNewAttack";
+export const searchService = async (keyword: string) => {
+    try {
+
+      const searchRegex = new RegExp(keyword, 'i');
+      const result = await AttackTypeModel.find({
+        $or: [
+          { gname: searchRegex },       
+          { summary: searchRegex },      
+          { city: searchRegex },      
+          { country_txt: searchRegex }, 
+          { attacktype1_txt: searchRegex } 
+        ]
+      });
+  
+      return result;
+    } catch (error) {
+      throw error;
+    }
+}
+
+export const addNewAttackService = async (attackType: IAttack) => {
+  try {
+    const{eventid, iyear, imonth, iday, country_txt, region_txt, city, latitude, longitude, attacktype1_txt, targtype1_txt, target1, gname, weaptype1_txt, nkill, nwound, nperps, summary} = attackType;
+    if(eventid && iyear && imonth && iday && country_txt && region_txt && city && latitude && longitude && attacktype1_txt && targtype1_txt && target1 && gname && weaptype1_txt && summary){
+      const newAttack = new AttackTypeModel({
+        eventid, iyear, imonth, iday, country_txt, region_txt, city, latitude, longitude, attacktype1_txt, targtype1_txt, target1, gname, weaptype1_txt, nkill, nwound, nperps, summary
+      });
+      await newAttack.save();
+      addNewAttackUtil(newAttack as unknown as IAttack );
+      return newAttack
+    }
+    else{
+      throw new Error('Missing required fields');
+    }
+    
+  } catch (error) {
+    throw error;
+  }
+}
 
 export const deadliestAttacksService = async () => {
     try {

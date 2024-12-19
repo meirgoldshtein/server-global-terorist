@@ -1,16 +1,9 @@
 import { Router } from "express";
 import  AttackModel from "../models/Attack";
-import { deadliestAttacks, highestCasualtyRegions, incidentTrends } from "../controllers/analysisController";
+import { deadliestAttacks, highestCasualtyRegions, incidentTrends, search } from "../controllers/analysisController";
 const router = Router();
 
-router.get("/test", async (req, res) => {
-    try {
-        const allEvents = await AttackModel.findOne({eventid: 197004080002});
-        res.status(200).json(allEvents);
-    } catch (error) {
-        res.status(500).json(error);
-    }
-});
+router.get("/search/:keywords", search);
 
 
 //מחזיר סוגי התקפות מדורגים לפי מספר הנפגעים הכולל 

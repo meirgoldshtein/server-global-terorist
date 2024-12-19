@@ -6,14 +6,14 @@ export interface IAttack extends Document {
     imonth: number;
     iday: number;
     country_txt: string;
-    region_txt: String;
+    region_txt: string;
     city: string;
     latitude: number;
     longitude: number;
-    attacktype1_txt:String;
+    attacktype1_txt:string;
     targtype1_txt: string;
     target1: string;
-    gname: String;
+    gname: string;
     weaptype1_txt: string;
     nkill: number | null;
     nwound: number | null;

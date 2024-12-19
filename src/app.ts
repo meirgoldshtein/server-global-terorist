@@ -22,12 +22,5 @@ app.use('/api/analysis', analysis);
 app.use('/api/relationships', relationships);
 
 export const io = new Server(server,{ cors: { origin: "*" } });
-io.on('connection', (socket) => {
-    console.log('socket: a user connected');
-    
-    socket.on('disconnect', () => {
-        console.log('socket: a user disconnected');
-    });
-});
 
 server.listen(PORT, () => console.log(`Listening on port ${PORT},visit http://localhost:${PORT}`));
