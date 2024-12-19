@@ -1,11 +1,10 @@
 import { Router } from "express";
 import  AttackModel from "../models/Attack";
+import { topGroups } from "../controllers/relationshipsController";
 const router = Router();
 
 //מחזיר את חמשת הארגונים המובילים לפי מספר התקריות באזור שצוין
-router.get("/top-groups", async (req, res) => {
-
-});
+router.get("/top-groups/:regionName", topGroups);
 
 //תיאור: מציג רשימת ארגונים שפעלו בשנה מסוימת עם מספר התקריות שלהם.
 router.get("/groups-by-year", async (req, res) => {
