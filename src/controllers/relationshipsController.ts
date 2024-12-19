@@ -33,7 +33,7 @@ export const deadliestRegions = async (req: Request, res: Response) => {
         if(!groupName) {
             throw new Error('Group name is required');
         }
-        const response = await deadliestRegionsService2(groupName);
+        const response = await deadliestRegionsService(groupName);
         res.status(200).json(response);
     } catch (error) {
         res.status(500).json(error);

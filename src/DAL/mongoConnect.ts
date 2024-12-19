@@ -7,11 +7,14 @@ import GroupModel from "../models/group";
 import AttackTypeModel from "../models/attackType";
 import YearModel from "../models/Year";
 import path from "path";
+import { seedRegionAnalytics } from "../utils/agrigations";
 
 export const connectDB = async () => {
     try {
         await connect(process.env.MONGODB_URI as string);
         const db_is_empty = await AttackModel.countDocuments();
+        // await seedRegionAnalytics();
+
         if (db_is_empty === 0) {
             // await seed();
             console.log("first seed");

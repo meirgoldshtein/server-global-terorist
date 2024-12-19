@@ -4,6 +4,7 @@ import RegionModel from "../models/region";
 import YearModel from "../models/Year";
 import { IAttack } from "../models/Attack";
 import { findTheMostDeadliestRegion } from "../utils/agrigations";
+import RegionAnaliticsModel, { IGroupSumData } from "../models/regionAnalitics";
 export const topGroupsService = async (regionName: string) => {
     try {
         const region = await RegionModel.findOne({ name: regionName });
@@ -56,6 +57,31 @@ export const groupsByYearService = async (year: number) => {
 }
 
 export const deadliestRegionsService = async (groupName: string) => {
+    try {
+        let toReturn:{ regionName: string; regionData: IGroupSumData; }[] = [];
+        const allRegionsAnalytics = await RegionAnaliticsModel.find({});
+        for(const regionAnalytics of allRegionsAnalytics) {
+            if(regionAnalytics.groupsSumData[0].name === groupName) {
+                toReturn.push({regionName: regionAnalytics.name, regionData:regionAnalytics.groupsSumData[0]});
+            }
+        }
+        return toReturn;
+    } catch (error) {
+        console.log(error)
+        throw error;
+    }
+}
+
+export const deadliestRegionsService2 = async (groupName: string) => {
+    try {
+        const sumCasualties = await findTheMostDeadliestRegion(groupName);
+        return sumCasualties;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const deadliestRegionsService3 = async (groupName: string) => {
     try {
             // צעד 1: קבלת כל האזורים הייחודיים במערכת
     const allRegions = await AttackModel.distinct('region_txt');
@@ -155,15 +181,6 @@ export const deadliestRegionsService = async (groupName: string) => {
         .sort((a, b) => b!.percentageOfTotalCasualties - a!.percentageOfTotalCasualties);
 
     return filteredResults;
-    } catch (error) {
-        throw error;
-    }
-}
-
-export const deadliestRegionsService2 = async (groupName: string) => {
-    try {
-        const sumCasualties = await findTheMostDeadliestRegion(groupName);
-        return sumCasualties;
     } catch (error) {
         throw error;
     }

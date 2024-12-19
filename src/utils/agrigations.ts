@@ -1,6 +1,7 @@
 import { IAttack } from "../models/Attack";
 import GroupModel, { IGroup } from "../models/group";
 import RegionModel from "../models/region";
+import RegionAnaliticsModel from "../models/regionAnalitics";
 
 interface IGroupSumData {
     name: string;
@@ -86,12 +87,13 @@ export const generateRegionsAndSumGroupsList = async () => {
         const groups = await createGroupsList();
 
         for (const region of regions) {
+            console.log("start to process region: " + region.name);
             for (const group of groups) {
                 if(group.name === "Unknown") {
                     continue;
                 }
                 const GroupsFiltering = await sumAllGroupCasualtiesInRegion(region.name, group.name);
-                console.log(GroupsFiltering?.name);
+            
                 if (!GroupsFiltering) {
                     console.log("bla bla");
                     continue; // דילוג על הקבוצה אם אין נתונים
@@ -135,13 +137,39 @@ export const findTheMostDeadliestRegion = async ( groupName: string) => {
             }
         })
     
-        return regions;
+        return toReturn;
     } catch (error) {
         return error;
     }
     
 }
 
+export const seedRegionAnalytics = async () => {
+
+    try {
+        
+        const regions = await generateRegionsAndSumGroupsList();      
+        const sortedRegions = sortDeadliestGroupsInRegion(regions);
+        console.log(sortedRegions)
+        console.log("start to seed region analytics");
+        for (const region of sortedRegions) {
+            const newRegion = new RegionAnaliticsModel({ 
+                name: region.name, 
+                groupsSumData: region.groupsSumData, 
+                sumOfAttackes: region.sumOfAttackes, 
+                sumOfCasualties: region.sumOfCasualties 
+            });
+            await newRegion.save(); 
+    
+            console.log("added region: " + region.name);
+        }
+        console.log("finished to seed region analytics");
+    } catch (error) {
+        console.log(error)
+        return error;
+    }
+    
+}
 export { createRegionsList,
      createGroupsList,
       sumAllGroupCasualtiesInRegion,

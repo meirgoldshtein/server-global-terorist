@@ -13,7 +13,7 @@ export const server = http.createServer(app);
 
 app.use(cors());
 app.use(express.json());
-connectDB();
+connectDB().then(() => console.log('db connected')).catch((err) => console.log(err));
 app.get('/ping', (req: Request, res: Response) => {
     res.status(200).send('pong')
 })
