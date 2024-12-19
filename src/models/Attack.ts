@@ -5,7 +5,6 @@ export interface IAttack extends Document {
     iyear: number;
     imonth: number;
     iday: number;
-
     country_txt: string;
     region_txt: String;
     city: string;

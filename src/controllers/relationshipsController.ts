@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { groupsByYearService, topGroupsService } from "../services/relationshipsService";
+import { deadliestRegionsService, deadliestRegionsService2, groupsByYearService, topGroupsService } from "../services/relationshipsService";
 
 export const topGroups = async (req: Request, res: Response) => {
     try {
@@ -29,8 +29,13 @@ export const groupsByYear = async (req: Request, res: Response) => {
 
 export const deadliestRegions = async (req: Request, res: Response) => {
     try {
-        
+        const groupName = req.params.groupName;
+        if(!groupName) {
+            throw new Error('Group name is required');
+        }
+        const response = await deadliestRegionsService2(groupName);
+        res.status(200).json(response);
     } catch (error) {
-        
+        res.status(500).json(error);
     }
 }
